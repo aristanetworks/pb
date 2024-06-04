@@ -143,7 +143,8 @@ class PasteResponse(DictResponse):
     @property
     def short(self):
         if all(i not in self._paste for i in ['namespace', 'private']):
-            return self._sid(6)
+            short = self._paste['short']
+            return self._conv.to_url(None, short, len(short))
 
     @property
     def date(self):

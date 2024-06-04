@@ -53,7 +53,7 @@ class SIDConverter(UnhexMixin, BaseConverter):
             _hex = hexlify(urlsafe_b64decode(sid)[-20:]).decode('utf-8')
         except BinError:
             _hex = None
-        return _hex, name, value[:4]
+        return _hex, name, value[:12]
 
 class SHA1Converter(UnhexMixin, SREMixin, BaseConverter):
     regex = '(([A-Za-z0-9]{40})(?:[.][^/]*)?)'

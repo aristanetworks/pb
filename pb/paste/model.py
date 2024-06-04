@@ -43,7 +43,7 @@ def _put(stream):
     return dict(
         content = b,
         digest = digest,
-        short = digest[-6:],
+        short = digest[-12:],
         size = size
     )
 
