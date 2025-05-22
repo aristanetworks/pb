@@ -95,3 +95,9 @@ def get_meta(**kwargs):
     return get_db().pastes.find(
         transform(kwargs)
     )
+
+def get_search_results(**kwargs):
+    return get_db().pastes.find(
+        transform(kwargs),
+        {"content": 0, "_id": 0},
+    )

@@ -6,6 +6,18 @@ MONGO:
 
 MONGO_DATABASE: pb
 
+# The value of this HTTP header will be echo'd by GET /whoami.
+REMOTE_USER_HEADER: remote-user
+
+# Added to the pb alias to determine the user.
+ALIAS_WHOAMI: $USER
+
+# Default limit for search request if none provided.
+DEFAULT_SEARCH_LIMIT: 100
+
+# Maximum limit allowed in one search request.
+MAX_SEARCH_LIMIT: 500
+
 #VARNISH_BASE: 'http://[::1]:8080/'
 
 #CDN_PREFIX: '//d34zelngniy2d8.cloudfront.net'

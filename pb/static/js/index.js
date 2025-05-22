@@ -1,5 +1,24 @@
 var API = (function(baseurl) {
 
+    var whoami = null;
+
+    function init_user() {
+        return $.ajax({
+            method: 'GET',
+            url: '/whoami',
+            args: {
+                dataType: 'text',
+                accepts: {
+                    text: "application/json",
+                }
+            }
+        }).done(function(data) {
+            whoami = data.user;
+        }).fail(function(xhr, status, error) {
+            console.error('Error making whoami request:', status, error);
+        });
+    }
+
     // method, args, uri
     function request(options) {
         options = options || {};
@@ -18,14 +37,18 @@ var API = (function(baseurl) {
     }
 
     function _fd(data) {
-        if (FormData.prototype.isPrototypeOf(data))
-            return data;
+        var fd;
 
-        var fd = new FormData();
+        if (FormData.prototype.isPrototypeOf(data)) {
+            fd = data;
+        } else {
+            fd = new FormData();
+            $.each(data, function(key, value) {
+                fd.append(key, value);
+            });
+        }
 
-        $.each(data, function(key, value) {
-            fd.append(key, value);
-        });
+        fd.append("tags", whoami);
 
         return fd;
     }
@@ -44,7 +67,6 @@ var API = (function(baseurl) {
     }
 
     function put(data, uri) {
-
         return request({
             method: 'PUT',
             uri: uri,
@@ -55,7 +77,6 @@ var API = (function(baseurl) {
     }
 
     function post(data, uri) {
-
         return request({
             method: 'POST',
             uri: uri,
@@ -94,6 +115,7 @@ var API = (function(baseurl) {
         url: {
             post: url_post
         },
+        init_user,
     }
 });
 

@@ -1,0 +1,55 @@
+{% extends "generic.html" %} {% block head %} {{ super() }}
+<link href="/static/css/pbs.css" type="text/css" rel="stylesheet" />
+<link href="/static/deps/font-awesome.min.css" type="text/css" rel="stylesheet" />
+<script src="/static/deps/jquery-1.12.0.min.js"></script>
+<script src="/static/deps/bootstrap.min.js"></script>
+{% endblock %} {% block body_nowrap %}
+<div class="container">
+  <div class="text-center">
+    <h1>Search Results</h1>
+  </div>
+  <table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Time (UTC)</th>
+        <th>Link</th>
+        <th>Tags</th>
+        <th>Mimetype</th>
+        <th class="text-right">Size</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if results %} {% for item in results %}
+      <tr>
+        <td>{{ item.date.strftime('%b %d, %Y %I:%M %p') }}</td>
+        <td>
+          <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.url }}</a>
+        </td>
+        <td>{{ item.get('tags', []) | join(', ') }}</td>
+        <td>{{ item.get('mimetype', '') }}</td>
+        <td class="text-right">
+          {% set size = item.get('size', 0) %}
+          {% set KB = 1024 %}
+          {% set MB = KB**2 %}
+          {% set GB = KB**3 %}
+
+          {% if size >= GB %}
+          {{ (size / GB) | round(2) }} GB
+          {% elif size >= MB %}
+          {{ (size / MB) | round(2) }} MB
+          {% elif size >= KB %}
+          {{ (size / KB) | round(2) }} KB
+          {% else %}
+          {{ size }} B
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %} {% else %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">No results found.</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

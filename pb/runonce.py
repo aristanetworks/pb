@@ -34,6 +34,8 @@ def add_indexes(db):
         [('label', pymongo.ASCENDING),
          ('namespace', pymongo.ASCENDING)], unique=True, sparse=True)
     db.pastes.create_index('private', sparse=True)
+    db.pastes.create_index('tags', sparse=True)
+    db.pastes.create_index('mimetype', sparse=True)
 
     db.namespaces.create_index('name', unique=True)
 

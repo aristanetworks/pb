@@ -88,6 +88,14 @@ def request_key(key):
         return request.json.get(key, request.json.get(key[0]))
     return request.form.get(key, request.form.get(key[0]))
 
+def request_key_list(key):
+    if _content_type() == 'application/json':
+        return request.json.get(key, request.json.get(key[0]))
+    values = request.form.getlist(key)
+    if not values:
+        values = request.form.getlist(key[0])
+    return values
+
 def absolute_url(endpoint, **kwargs):
     scheme = request.environ.get('HTTP_X_FORWARDED_PROTO', request.scheme)
     return url_for(endpoint, _external=True, _scheme=scheme, **kwargs)

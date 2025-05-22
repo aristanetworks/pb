@@ -224,6 +224,12 @@ sunset (optional)::
 The paste will be deleted after the given amount of time has passed.
 The value of this field must be a positive integer and represents the number of seconds (after having been pasted) that the paste should survive before being automatically deleted.
 
+t::
+tags (optional)::
+
+Adds tags to this paste that can be used as filters in the search API.
+Expects an array of strings. Can be provided in `curl` by specifying `-F t=` multiple times.
+
 ====
 
 POST /<handler>
@@ -249,6 +255,55 @@ PUT /<uuid>
 Replaces the content of the paste that matches the provided UUID.
 
 Form submission is otherwise identical to POST.
+
+GET /search
+~~~~~~~~~~~
+
+Search for pastes.
+
+Multiple values for a single filter means logical OR.
+`/search?tag=value1&tag=value2`
+
+Multiple different filters means logical AND.
+`/search?tag=value1&mimetype=image%2Fpng`
+
+Query Parameters:
+====
+
+limit::
+
+Maximum number of pastes to return in one request.
+
+Must be greater than 0.
+Must not exceed the maximum limit if one was set in the app configuration.
+Default limit is set in the app configuration, else the default limit is 100.
+
+digest::
+
+Filter for paste with digest.
+
+short::
+
+Filter for paste with short.
+
+label::
+
+Filter for paste with label.
+
+tag::
+
+Filter for pastes with tag.
+
+mimetype::
+
+Filter for pastes with mimetype.
+
+====
+
+GET /whoami
+~~~~~~~~~~~
+
+Returns the requestor's username based on a HTTP header set in the app configuration.
 
 EXAMPLES
 --------
