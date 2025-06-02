@@ -27,6 +27,9 @@
       </div>
       <button type="submit" class="btn btn-primary">Search</button>
     </form>
+    {% if nextUrl %}
+    <button id="next-page" class="btn" onclick="goToNextPage(event)">Next Page</button>
+    {% endif %}
   </div>
   <table class="table table-striped table-bordered table-hover">
     <thead class="table-dark">
@@ -88,5 +91,12 @@
     // This will reload the page.
     window.location.search = params.toString();
   }
+  {% if nextUrl %}
+  function goToNextPage(event) {
+    event.preventDefault();
+    // This will reload the page.
+    window.location = "{{ nextUrl | safe }}";
+  }
+  {% endif %}
 </script>
 {% endblock %}

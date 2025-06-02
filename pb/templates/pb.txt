@@ -278,6 +278,10 @@ Must be greater than 0.
 Must not exceed the maximum limit if one was set in the app configuration.
 Default limit is set in the app configuration, else the default limit is 100.
 
+cursor::
+
+Epoch timestamp with millisecond precision. Only queries pastes created before this time.
+
 digest::
 
 Filter for paste with digest.
