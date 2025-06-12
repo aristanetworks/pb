@@ -9,7 +9,7 @@
     :license: GPLv3, see LICENSE for details.
 """
 
-from flask import g, request, current_app
+from flask import g, current_app
 from pymongo import MongoClient
 from gridfs import GridFS
 

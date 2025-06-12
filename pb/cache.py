@@ -9,13 +9,11 @@
     :license: GPLv3, see LICENSE for details.
 """
 
-from os import path
-from functools import wraps
 from concurrent.futures import ThreadPoolExecutor
 
 from hashlib import sha1
 
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import urljoin
 from requests.sessions import Session
 
 from werkzeug.wrappers import get_host

@@ -9,8 +9,7 @@
     :license: GPLv3, see LICENSE for details.
 """
 
-from json import dumps
-from flask import render_template, url_for, request
+from flask import render_template, url_for
 from werkzeug.routing import BaseConverter
 
 from pb.util import rst, markdown, style_args

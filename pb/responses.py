@@ -3,7 +3,7 @@ from yaml.dumper import SafeDumper
 import json
 from uuid import UUID
 
-from datetime import timedelta, datetime
+from datetime import datetime
 from pytz import utc
 
 from werkzeug.wrappers import Response

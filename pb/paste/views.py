@@ -15,8 +15,7 @@ from io import BytesIO
 
 from datetime import timedelta, datetime
 
-from flask import Blueprint, request, render_template, current_app
-from jinja2 import Markup
+from flask import Blueprint, request, render_template
 from pygments.formatters import HtmlFormatter, get_all_formatters
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
@@ -25,7 +24,7 @@ from pymongo import errors
 
 from pb.namespace import model as ns_model
 from pb.paste import model, handler as _handler
-from pb.util import highlight, request_content, request_keys, rst, markdown, absolute_url, get_host_name, parse_sunset, asciidoc
+from pb.util import highlight, request_content, request_keys, absolute_url, get_host_name, parse_sunset, asciidoc
 from pb.cache import invalidate
 from pb.responses import BaseResponse, StatusResponse, PasteResponse, DictResponse, redirect
 
