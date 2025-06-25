@@ -453,4 +453,5 @@ def manpage_docbook():
 
 @paste.route('/sh')
 def shell_func():
-    return BaseResponse(render_template("pb.sh"), mimetype="text/plain")
+    alias_whoami = current_app.config.get('ALIAS_WHOAMI')
+    return BaseResponse(render_template("pb.sh", alias_whoami=alias_whoami), mimetype="text/plain")
