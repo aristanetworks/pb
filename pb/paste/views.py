@@ -387,14 +387,29 @@ def get(sid=None, sha1=None, label=None, namespace=None, lexer=None, handler=Non
     if not mimetype:
         mimetype = paste.get('mimetype', 'text/plain')
 
+    headers = {
+        "Content-Security-Policy": "; ".join([
+            "default-src 'none'",
+            "style-src 'self' 'unsafe-inline'",
+            "base-uri 'none'",
+            "form-action 'none'",
+            "frame-ancestors 'none'",
+        ]),
+    }
+
     if lexer != None:
         content, code, mimetype = highlight(content, lexer, formatter)
         if code != 200:
             return content, code
+        return BaseResponse(content, mimetype=mimetype, headers=headers)
+
     if handler != None:
         return _handler.get(handler, content, mimetype, path=path)
 
-    return BaseResponse(content, mimetype=mimetype)
+    if mimetype not in ["text/plain", "application/json"]:
+        headers["Content-Disposition"] = "attachment"
+
+    return BaseResponse(content, mimetype=mimetype, headers=headers)
 
 @paste.route('/<handler:handler>', methods=['POST'])
 def preview(handler):
