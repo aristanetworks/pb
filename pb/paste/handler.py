@@ -9,7 +9,7 @@
     :license: GPLv3, see LICENSE for details.
 """
 
-from flask import render_template, url_for
+from flask import render_template
 from werkzeug.routing import BaseConverter
 
 from pb.util import rst, markdown, style_args
@@ -32,25 +32,8 @@ def render(content, mimetype, partial=False, **kwargs):
         content = render_template("generic.html", cc='container-fluid', content=content, **style_args())
     return content
 
-options = ['autoPlay', 'loop', 'startAt', 'speed', 'snapshot',
-           'fontSize', 'theme', 'title', 'author', 'authorURL', 'authorImgURL']
-
-def lazy_int(num):
-    try:
-        return int(num)
-    except ValueError:
-        return num
-
-def terminal(content, mimetype, path=None, **kwargs):
-    # FIXME: this is really bad, because the db bothered to give us
-    # content, and we discard it here.
-    url = url_for('paste.get', label='{}.json'.format(path))
-    content = render_template("asciinema.html", url=url)
-    return content
-
 handlers = {
     'r': render,
-    't': terminal
 }
 
 def get(handler, content, mimetype, **kwargs):
