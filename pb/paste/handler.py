@@ -13,7 +13,7 @@ from flask import render_template, url_for
 from werkzeug.routing import BaseConverter
 
 from pb.util import rst, markdown, style_args
-from pb.responses import StatusResponse
+from pb.responses import BaseResponse, StatusResponse
 
 from mimetypes import add_type
 
@@ -57,7 +57,15 @@ def get(handler, content, mimetype, **kwargs):
     h = handlers.get(handler)
     if not h:
         return StatusResponse({"invalid handler": handler}, 400)
-    return h(content, mimetype, **kwargs)
+    return BaseResponse(h(content, mimetype, **kwargs), headers={
+        "Content-Security-Policy": "; ".join([
+            "default-src 'none'",
+            "style-src 'self' 'unsafe-inline'",
+            "base-uri 'none'",
+            "form-action 'none'",
+            "frame-ancestors 'none'",
+        ]),
+    })
 
 # dirtyhack
 class HandlerConverter(BaseConverter):
