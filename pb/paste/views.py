@@ -395,6 +395,7 @@ def get(sid=None, sha1=None, label=None, namespace=None, lexer=None, handler=Non
             "form-action 'none'",
             "frame-ancestors 'none'",
         ]),
+        "X-Content-Type-Options": "nosniff",
     }
 
     if lexer != None:
@@ -406,7 +407,12 @@ def get(sid=None, sha1=None, label=None, namespace=None, lexer=None, handler=Non
     if handler != None:
         return _handler.get(handler, content, mimetype, path=path)
 
-    if mimetype not in ["text/plain", "application/json"]:
+    if mimetype not in [
+        "application/json",
+        "image/jpeg",
+        "image/png",
+        "text/plain",
+    ]:
         headers["Content-Disposition"] = "attachment"
 
     return BaseResponse(content, mimetype=mimetype, headers=headers)
