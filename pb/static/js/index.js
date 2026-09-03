@@ -126,6 +126,8 @@ var API = (function(baseurl) {
 
 var WWW = (function(undefined) {
 
+    var clipboard_file = null;
+
     function init() {
         $('#datetime').datetimepicker({
             icons: {
@@ -172,6 +174,8 @@ var WWW = (function(undefined) {
 
         $('#content').removeClass('hidden');
         $('#filename').addClass('hidden');
+        $('#image-preview').attr('src', '');
+        clipboard_file = null;
 
         $('input, button').not('.ignore-disable').prop('disabled', false);
     }
@@ -183,8 +187,54 @@ var WWW = (function(undefined) {
         $('#content').addClass('hidden');
         $('#filename').removeClass('hidden')
             .children().text(filename);
+        $('#image-preview').addClass('hidden').attr('src', '');
 
         $('#shorturl').prop('disabled', true);
+    }
+
+    function paste(event) {
+        var clipboard = event.originalEvent.clipboardData;
+        var files = clipboard && clipboard.files;
+        var image;
+        var reader;
+
+        if ($('#file-input').prop('files')[0] !== undefined) {
+            event.preventDefault();
+            return;
+        }
+
+        if (!files) {
+            return;
+        }
+
+        image = $.grep(files, function(file) {
+            return file.type && file.type.indexOf('image/') === 0;
+        })[0];
+
+        if (!image) {
+            if (clipboard_file !== null && clipboard.getData('text/plain')) {
+                clipboard_file = null;
+                $('#image-preview').attr('src', '').addClass('hidden');
+                $('#filename').addClass('hidden');
+                $('#content').removeClass('hidden');
+            }
+            return;
+        }
+
+        event.preventDefault();
+        clipboard_file = image;
+        $('#content').val('');
+        $('#content').addClass('hidden');
+        $('#filename').removeClass('hidden');
+        $('#image-preview').removeClass('hidden');
+
+        reader = new FileReader();
+        reader.onload = function(load_event) {
+            if (clipboard_file === image) {
+                $('#image-preview').attr('src', load_event.target.result);
+            }
+        };
+        reader.readAsDataURL(image);
     }
 
     function paste_data(content_only) {
@@ -198,6 +248,8 @@ var WWW = (function(undefined) {
 
         if (file !== undefined)
             fd.append('content', file);
+        else if (clipboard_file !== null)
+            fd.append('content', clipboard_file);
         else
             fd.append('content', content);
 
@@ -292,6 +344,7 @@ var WWW = (function(undefined) {
         set_uuid: set_uuid,
         set_content: set_content,
         swap_sunset: swap_sunset,
+        paste: paste,
         init: init
     };
 });
